@@ -1,25 +1,52 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import Link from "next/link";
-
 import styles from "./header.module.scss";
 
-const Header = () => (
-  <div className={styles.header}>
-    <Link href="/">
-      <a className={styles.logoContainer}>
-        <img src="/crown.svg" className={styles.logo} />
-      </a>
-    </Link>
+import { auth } from "../../firebase/firebase.utils";
+import { connect } from "react-redux";
 
-    <div className={styles.options}>
-      <Link href="/shop">
-        <a className={styles.option}>SHOP</a>
+import CartIcon from "../cart-icon/cart-icon.component";
+import CartDropdown from "../cart-dropdown/cart-dropdown.component";
+const Header = ({ currentUser, hidden }) => {
+  return (
+    <div className={styles.header}>
+      <Link href="/">
+        <a className={styles.logoContainer}>
+          <img src="/crown.svg" className={styles.logo} />
+        </a>
       </Link>
-      <Link href="/shop">
-        <a className={styles.option}>CONTACT</a>
-      </Link>
+
+      <div className={styles.options}>
+        <Link href="/shop">
+          <a className={styles.option}>SHOP</a>
+        </Link>
+        <Link href="/shop">
+          <a className={styles.option}>CONTACT</a>
+        </Link>
+        {currentUser ? (
+          <div
+            className={styles.option}
+            onClick={() => auth.signOut()}>
+            SIGN OUT
+          </div>
+        ) : (
+          <Link className={styles.option} href="/sign-in">
+            SIGN IN
+          </Link>
+        )}
+        <CartIcon />
+      </div>
+      {hidden ? null : <CartDropdown />}
     </div>
-  </div>
-);
+  );
+};
 
-export default Header;
+const mapStateToProps = ({
+  user: { currentUser },
+  cart: { hidden },
+}) => ({
+  currentUser,
+  hidden,
+});
+
+export default connect(mapStateToProps)(Header);
