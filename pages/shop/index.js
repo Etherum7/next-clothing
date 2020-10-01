@@ -1,10 +1,9 @@
-import ShopPage from "../../components/shoppage/shop-page.component";
+import CollectionOverview from "../../components/collection-overview/collection-overview.component";
 
 export default function Shop() {
   return (
     <>
-      <ShopPage />
-
+      <CollectionOverview />
     </>
   );
 }
