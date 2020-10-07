@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+
 import HomePage from "../components/homepage/homepage.component";
 
 import styles from "../styles/Home.module.css";
@@ -11,7 +12,7 @@ import {
   createUserProfileDocument,
 } from "../firebase/firebase.utils";
 
-function Home({ setCurrentUser }) {
+function Home({ setCurrentUser, collectionsArray }) {
   useEffect(() => {
     const unsubscribeFromAuth = auth.onAuthStateChanged(
       async (userAuth) => {
@@ -26,18 +27,20 @@ function Home({ setCurrentUser }) {
               ...snapShot.data(),
             });
           });
+         
         } else {
           setCurrentUser(userAuth);
         }
       }
     );
-  }, [setCurrentUser]);
+  }, [setCurrentUser, collectionsArray]);
   return (
     <div>
       <HomePage />
     </div>
   );
 }
+
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
 });
